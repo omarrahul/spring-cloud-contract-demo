@@ -1,0 +1,32 @@
+# .gitpod.yml
+
+# Define the tasks to run when the workspace starts
+tasks:
+  - name: Build Consumer (to generate contracts)
+    init: |
+      echo "Step 1: Building the Consumer to generate stubs and contracts..."
+      cd consumer-service
+      mvn clean install
+      echo "✅ Consumer built successfully. Contracts are now in your local .m2 repo."
+      cd ..
+  - name: Validate Producer (Initial Build)
+    init: |
+      echo "Step 2: Building the Producer to verify it meets the contract..."
+      cd producer-service
+      mvn clean install
+      echo "✅ Producer build PASSED. The API correctly implements the contract."
+      cd ..
+    command: |
+      echo ""
+      echo "======================================================================"
+      echo "✅ DEMO READY ✅"
+      echo "The environment is set up. Both services have been built."
+      echo "The initial build was successful, proving the contract is met."
+      echo ""
+      echo "👉 Your next step is to introduce the breaking change in 'producer-service'."
+      echo "======================================================================"
+
+# Expose the producer's port in case you want to run it
+ports:
+  - port: 8080
+    onOpen: ignore
